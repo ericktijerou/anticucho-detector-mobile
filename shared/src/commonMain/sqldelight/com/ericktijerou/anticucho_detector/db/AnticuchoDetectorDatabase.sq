@@ -1,0 +1,14 @@
+
+CREATE TABLE Person(
+name TEXT NOT NULL PRIMARY KEY,
+lastname TEXT NOT NULL
+);
+
+insertItem:
+INSERT OR REPLACE INTO Person(name, lastname)VALUES(?,?);
+
+selectAll:
+SELECT * FROM Person;
+
+deleteAll:
+DELETE FROM Person;

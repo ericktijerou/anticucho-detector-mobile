@@ -1,0 +1,5 @@
+package com.ericktijerou.anticucho_detector.di
+
+import com.ericktijerou.anticucho_detector.db.AnticuchoDetectorDatabase
+
+class AnticuchoDetectorDatabaseWrapper(val instance: AnticuchoDetectorDatabase?)
