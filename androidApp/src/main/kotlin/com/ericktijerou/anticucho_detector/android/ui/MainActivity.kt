@@ -4,7 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.registerForActivityResult
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -76,7 +76,7 @@ fun MainScreen() {
 
 @Composable
 fun RequestPermission(permission: String, onPermissionGranted: (Boolean) -> Unit) {
-    val l = registerForActivityResult(
+    val l = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { result ->
             onPermissionGranted(result.all { it.value })
