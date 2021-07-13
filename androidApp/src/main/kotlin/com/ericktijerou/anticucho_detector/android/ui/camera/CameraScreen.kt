@@ -17,8 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.ericktijerou.anticucho_detector.android.R
 import com.ericktijerou.anticucho_detector.android.ui.AnticuchoDetectorViewModel
-import com.ericktijerou.anticucho_detector.android.ui.ImageButton
-import com.ericktijerou.anticucho_detector.android.ui.SimpleCameraPreview
+import com.ericktijerou.anticucho_detector.android.ui.component.ImageButton
+import com.ericktijerou.anticucho_detector.android.ui.component.SimpleCameraPreview
 import com.ericktijerou.anticucho_detector.android.util.Screen
 import org.koin.androidx.compose.getViewModel
 import java.io.File
@@ -31,16 +31,20 @@ fun CameraScreen(goToResult: (String) -> Unit) {
 
     if (result.isNotEmpty()) goToResult(Screen.Result.route(result))
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        SimpleCameraPreview(
-            viewModel.setupImageCapture(0, getOutputDirectory(LocalContext.current))
-        )
-        Button(onClick = { viewModel.setGestureCode() }, modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)) {
-            Text("TAKE")
-        }
-        ImageButton(viewModel.captureFileUri) { viewModel.viewImage(it) }
+    if (permissionGranted.value) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            SimpleCameraPreview(
+                viewModel.setupImageCapture(0, getOutputDirectory(LocalContext.current)),
+                Modifier.fillMaxSize()
+            )
+            Button(onClick = { viewModel.setGestureCode() }, modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)) {
+                Text("TAKE")
+            }
+            ImageButton(viewModel.captureFileUri) { viewModel.viewImage(it) }
 
+        }
     }
+
     RequestPermission(Manifest.permission.CAMERA) { granted ->
         if (granted) {
             permissionGranted.value = true

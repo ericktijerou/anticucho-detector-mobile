@@ -1,13 +1,15 @@
-package com.ericktijerou.anticucho_detector.android.ui
+package com.ericktijerou.anticucho_detector.android.ui.component
 
 import android.util.Size
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.LinearLayout
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,6 +22,7 @@ import androidx.lifecycle.LifecycleOwner
 @Composable
 fun SimpleCameraPreview(
     imageCapture: ImageCapture,
+    modifier: Modifier
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -27,20 +30,22 @@ fun SimpleCameraPreview(
 
     AndroidView(
         factory = { ctx ->
-            val preview = PreviewView(ctx)
+            val previewView = PreviewView(ctx).apply {
+                implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+            }
             val executor = ContextCompat.getMainExecutor(ctx)
             cameraProviderFuture.addListener({
                 val cameraProvider = cameraProviderFuture.get()
                 bindPreview(
                     lifecycleOwner,
-                    preview,
+                    previewView,
                     cameraProvider,
                     imageCapture
                 )
             }, executor)
-            preview
+            previewView
         },
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
     )
 }
 

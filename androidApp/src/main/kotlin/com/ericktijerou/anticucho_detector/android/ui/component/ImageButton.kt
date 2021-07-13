@@ -1,4 +1,4 @@
-package com.ericktijerou.anticucho_detector.android.ui
+package com.ericktijerou.anticucho_detector.android.ui.component
 
 import android.media.MediaScannerConnection
 import android.net.Uri
