@@ -61,11 +61,11 @@ class AnticuchoDetectorViewModel(
         Log.d(TAG, "view Image: $uri")
     }
 
-    fun setupImageCapture(rotation: Int, outputFolder: File): ImageCapture {
+    fun setupImageCapture(rotation: Int, outputFolder: File, resolution: Size): ImageCapture {
         if (!this::imageCapture.isInitialized) {
             imageCapture = ImageCapture.Builder()
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                .setTargetResolution(Size(600, 800))
+                .setTargetResolution(resolution)
                 .setTargetRotation(rotation)
                 .build()
             this.outputFolder = outputFolder
@@ -78,11 +78,7 @@ class AnticuchoDetectorViewModel(
         runBlocking {
             if (!capturing) {
                 capturing = true
-                CoroutineScope(Dispatchers.IO).launch {
-                    delay(5000L)
-                    capturing = false
-                    captureFileUri = null
-                }
+                //captureFileUri = null
                 capture()
             }
         }
@@ -104,6 +100,7 @@ class AnticuchoDetectorViewModel(
         imageCapture.takePicture(outputOptions, Executors.newSingleThreadExecutor(),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    capturing = false
                     captureFileUri = output.savedUri ?: Uri.fromFile(photoFile)
                     _upload.postValue(true)
                     Log.d(TAG, "Photo capture succeeded: $captureFileUri")

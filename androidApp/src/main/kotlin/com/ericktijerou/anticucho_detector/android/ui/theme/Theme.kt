@@ -20,7 +20,16 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = Color.White,
+    primary = BlackLight,
+    primaryVariant = BlackLight,
+    secondary = Teal200,
+    background = BackgroundDark,
+    surface = Color.Black,
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onBackground = Color.White,
+    onSurface = Color.White
+/*    primary = Color.White,
     primaryVariant = Color.White,
     secondary = Teal200,
     background = BackgroundLight,
@@ -28,13 +37,16 @@ private val LightColorPalette = lightColors(
     onPrimary = Color.Black,
     onSecondary = Color.Black,
     onBackground = Color.Black,
-    onSurface = Color.Black
+    onSurface = Color.Black*/
 )
 
 private val LightCustomColorPalette = DetectorThemeColors(
-    textPrimaryColor = Color.Black,
+    textPrimaryColor = Color.White,
+    textSecondaryColor = TextSecondaryDark,
+    isDark = true
+/*    textPrimaryColor = Color.Black,
     textSecondaryColor = TextSecondaryLight,
-    isDark = false
+    isDark = false*/
 )
 
 private val DarkCustomColorPalette = DetectorThemeColors(
