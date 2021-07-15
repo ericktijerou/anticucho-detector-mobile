@@ -77,7 +77,7 @@ fun DetectorTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
     }
 }
 
-object MyTheme {
+object DetectorTheme {
     val colors: Colors
         @Composable
         get() = MaterialTheme.colors

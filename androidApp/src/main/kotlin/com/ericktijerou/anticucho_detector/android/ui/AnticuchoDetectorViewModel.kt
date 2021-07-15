@@ -11,9 +11,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.*
 import co.touchlab.kermit.Kermit
 import com.ericktijerou.anticucho_detector.repository.AnticuchoDetectorRepository
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,12 +32,12 @@ class AnticuchoDetectorViewModel(
                 val result = compareImage()
                 emit(result)
             } else {
-                emit("")
+                emit(null)
             }
         }
     }
 
-    val handler = CoroutineExceptionHandler { _, exception ->
+    private val handler = CoroutineExceptionHandler { _, exception ->
         Log.e("ERROR", exception.message.orEmpty())
     }
 
@@ -77,7 +78,7 @@ class AnticuchoDetectorViewModel(
         }
     }
 
-    private suspend fun compareImage(): String {
+    private suspend fun compareImage(): List<String> {
         val file = File(captureFileUri?.path.orEmpty())
         return detectorRepository.compareImage(filename = file.name, file.absolutePath)
     }
@@ -106,6 +107,7 @@ class AnticuchoDetectorViewModel(
 
     fun clearCapturedImage() {
         captureFileUri = null
+        _upload.postValue(false)
     }
 
     fun uploadImage() {

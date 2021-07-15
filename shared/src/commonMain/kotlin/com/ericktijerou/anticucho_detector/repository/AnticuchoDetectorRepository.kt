@@ -11,12 +11,12 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.coroutines.CoroutineContext
 
-class AnticuchoDetectorRepository : KoinComponent  {
+class AnticuchoDetectorRepository : KoinComponent {
     private val anticuchoDetectorApi: AnticuchoDetectorApi by inject()
     private val logger: Kermit by inject()
 
     private val coroutineScope: CoroutineScope = MainScope()
-    private val database : AnticuchoDetectorDatabaseWrapper by inject()
+    private val database: AnticuchoDetectorDatabaseWrapper by inject()
     private val databaseQueries = database.instance?.anticuchoDetectorDatabaseQueries
 
     var peopleJob: Job? = null
@@ -29,7 +29,7 @@ class AnticuchoDetectorRepository : KoinComponent  {
         })?.asFlow()?.mapToList() ?: flowOf(emptyList())
     }
 
-    suspend fun compareImage(filename: String, filepath: String): String  {
+    suspend fun compareImage(filename: String, filepath: String): List<String> {
         logger.d { "fetchAndStorePeople" }
         val response = anticuchoDetectorApi.compareImage(filename, filepath)
 
@@ -39,11 +39,12 @@ class AnticuchoDetectorRepository : KoinComponent  {
         response.result.forEach {
             databaseQueries?.insertItem(it, it)
         }
-        return response.result.first()
+        return response.result
     }
 
     // Used by web client atm
-    suspend fun fetchPeople(filename: String, filepath: String) = anticuchoDetectorApi.compareImage(filename, filepath).result
+    suspend fun fetchPeople(filename: String, filepath: String) =
+        anticuchoDetectorApi.compareImage(filename, filepath).result
 
     //fun getPersonBio(personName: String) = personBios[personName] ?: ""
     //fun getPersonImage(personName: String) = personImages[personName] ?: ""
@@ -73,7 +74,6 @@ class AnticuchoDetectorRepository : KoinComponent  {
             delay(POLL_INTERVAL)
         }
     }*/
-
 
 
     val iosScope: CoroutineScope = object : CoroutineScope {

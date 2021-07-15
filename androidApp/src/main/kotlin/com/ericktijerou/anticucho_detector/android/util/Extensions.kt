@@ -23,3 +23,5 @@ fun File.createDirIfNotExists() = apply {
 fun Any?.isNull(): Boolean = (this == null)
 
 fun Any?.isNotNull(): Boolean = (this != null)
+
+fun Int?.orZero(): Int = this ?: 0
