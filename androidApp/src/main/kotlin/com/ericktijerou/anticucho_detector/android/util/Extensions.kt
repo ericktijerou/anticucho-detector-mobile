@@ -20,6 +20,7 @@ fun File.createDirIfNotExists() = apply {
         mkdir()
     }
 }
+
 fun Any?.isNull(): Boolean = (this == null)
 
 fun Any?.isNotNull(): Boolean = (this != null)

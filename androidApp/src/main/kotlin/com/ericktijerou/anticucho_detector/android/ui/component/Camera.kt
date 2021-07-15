@@ -1,9 +1,6 @@
 package com.ericktijerou.anticucho_detector.android.ui.component
 
 import android.util.Size
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture

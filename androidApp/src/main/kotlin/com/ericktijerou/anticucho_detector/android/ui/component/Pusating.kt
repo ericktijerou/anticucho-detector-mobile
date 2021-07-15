@@ -21,10 +21,12 @@ fun Pulsating(
 ) {
     val selected = remember { mutableStateOf(false) }
     val scale = animateFloatAsState(if (selected.value) pulseFraction else 1f)
-    Box(contentAlignment = Alignment.Center, modifier = modifier.scale(scale.value).noRippleClickable {
-        onClick()
-        selected.value = true
-    }) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.scale(scale.value).noRippleClickable {
+            onClick()
+            selected.value = true
+        }) {
         content(selected.value)
     }
     LaunchedEffect(selected.value) {

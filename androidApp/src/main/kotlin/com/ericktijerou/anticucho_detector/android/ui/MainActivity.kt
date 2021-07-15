@@ -17,7 +17,10 @@ class MainActivity : ComponentActivity() {
         Configuration.getInstance().userAgentValue = APPLICATION_ID
         setContent {
             val systemUiController = remember { SystemUiController(window) }
-            CompositionLocalProvider(LocalSysUiController provides systemUiController, LocalBackDispatcher provides onBackPressedDispatcher) {
+            CompositionLocalProvider(
+                LocalSysUiController provides systemUiController,
+                LocalBackDispatcher provides onBackPressedDispatcher
+            ) {
                 DetectorApp()
             }
         }
