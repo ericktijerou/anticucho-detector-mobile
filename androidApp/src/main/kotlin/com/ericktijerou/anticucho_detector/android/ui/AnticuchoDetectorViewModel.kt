@@ -29,10 +29,8 @@ class AnticuchoDetectorViewModel(
         liveData(handler) {
             if (it) {
                 val result = compareImage()
-                Log.d("HOLA", result)
                 emit(result)
             } else {
-                Log.d("HOLA", "EMPTY")
                 emit("")
             }
         }
@@ -53,10 +51,6 @@ class AnticuchoDetectorViewModel(
     private lateinit var imageCapture: ImageCapture
     private lateinit var outputFolder: File
 
-    fun setGestureCode() {
-        takePicture()
-    }
-
     fun viewImage(uri: Uri) {
         Log.d(TAG, "view Image: $uri")
     }
@@ -74,11 +68,10 @@ class AnticuchoDetectorViewModel(
         return imageCapture
     }
 
-    private fun takePicture() {
+    fun takePicture() {
         runBlocking {
             if (!capturing) {
                 capturing = true
-                //captureFileUri = null
                 capture()
             }
         }
@@ -102,7 +95,6 @@ class AnticuchoDetectorViewModel(
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     capturing = false
                     captureFileUri = output.savedUri ?: Uri.fromFile(photoFile)
-                    _upload.postValue(true)
                     Log.d(TAG, "Photo capture succeeded: $captureFileUri")
                 }
 
@@ -110,6 +102,14 @@ class AnticuchoDetectorViewModel(
                     Log.e(TAG, "Photo capture exception: $exception")
                 }
             })
+    }
+
+    fun clearCapturedImage() {
+        captureFileUri = null
+    }
+
+    fun uploadImage() {
+        _upload.postValue(true)
     }
 
     companion object {

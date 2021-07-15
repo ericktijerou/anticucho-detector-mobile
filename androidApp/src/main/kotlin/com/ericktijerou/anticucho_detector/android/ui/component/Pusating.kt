@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import com.ericktijerou.anticucho_detector.android.util.noRippleClickable
@@ -20,7 +21,7 @@ fun Pulsating(
 ) {
     val selected = remember { mutableStateOf(false) }
     val scale = animateFloatAsState(if (selected.value) pulseFraction else 1f)
-    Box(modifier = modifier.scale(scale.value).noRippleClickable {
+    Box(contentAlignment = Alignment.Center, modifier = modifier.scale(scale.value).noRippleClickable {
         onClick()
         selected.value = true
     }) {

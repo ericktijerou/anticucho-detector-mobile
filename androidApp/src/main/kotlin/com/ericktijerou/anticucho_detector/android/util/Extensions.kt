@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import java.io.File
 
 inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit) = composed {
     clickable(
@@ -13,3 +14,12 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit) = compose
         onClick()
     }
 }
+
+fun File.createDirIfNotExists() = apply {
+    if (!exists()) {
+        mkdir()
+    }
+}
+fun Any?.isNull(): Boolean = (this == null)
+
+fun Any?.isNotNull(): Boolean = (this != null)
