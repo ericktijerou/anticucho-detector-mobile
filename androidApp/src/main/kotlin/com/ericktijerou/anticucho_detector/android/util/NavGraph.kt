@@ -1,17 +1,13 @@
 package com.ericktijerou.anticucho_detector.android.util
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ericktijerou.anticucho_detector.android.ui.camera.CameraScreen
 import com.ericktijerou.anticucho_detector.android.ui.result.ResultScreen
-import com.ericktijerou.anticucho_detector.android.ui.theme.DetectorTheme
 
 sealed class Screen(val route: String) {
     object Camera : Screen("camera")
@@ -27,8 +23,7 @@ fun NavGraph(startDestination: Screen) {
     val actions = remember(navController) { Actions(navController) }
     NavHost(
         navController = navController,
-        startDestination = startDestination.route,
-        modifier = Modifier.fillMaxSize().background(color = DetectorTheme.colors.background)
+        startDestination = startDestination.route
     ) {
         composable(Screen.Camera.route) {
             CameraScreen(actions.goToResult)
