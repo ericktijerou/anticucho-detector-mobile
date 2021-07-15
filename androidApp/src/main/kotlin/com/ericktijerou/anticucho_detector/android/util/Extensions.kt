@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import java.io.File
+import java.util.*
 
 inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit) = composed {
     clickable(
@@ -26,3 +27,11 @@ fun Any?.isNull(): Boolean = (this == null)
 fun Any?.isNotNull(): Boolean = (this != null)
 
 fun Int?.orZero(): Int = this ?: 0
+
+fun String.capitalizeFirstLetter(): String {
+    return this.split(" ").joinToString(" ") { str ->
+        str.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+        }
+    }.trimEnd()
+}

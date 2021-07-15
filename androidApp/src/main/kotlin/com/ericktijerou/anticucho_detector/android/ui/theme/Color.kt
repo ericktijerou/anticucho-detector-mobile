@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val Teal200 = Color(0xFF03DAC5)
 
-val BlackLight = Color(0xFF161617)
+val BlackLight = Color(0xFF202124)
 val PurpleOnboarding = Color(0xFFD9DFF9)
 val OrangeOnboarding = Color(0xFFEFD3B6)
 val BlueOnboardingLight = Color(0xFFC8DCEA)

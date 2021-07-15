@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ericktijerou.anticucho_detector.android.ui.theme.BackgroundDark
 
 @Composable
 fun TakePhotoButton(
@@ -57,7 +58,7 @@ fun AnalyzeProgressButton(modifier: Modifier, loading: Boolean) {
         val strokePx = LocalDensity.current.run { 2.dp.toPx() }
         Canvas(Modifier.fillMaxSize()) {
             drawCircle(
-                color = Color.Black,
+                color = BackgroundDark,
                 radius = size.minDimension / 2 - strokePx,
                 center = Offset(size.width / 2, size.height / 2),
             )
