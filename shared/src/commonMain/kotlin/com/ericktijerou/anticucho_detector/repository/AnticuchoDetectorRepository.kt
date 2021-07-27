@@ -1,6 +1,7 @@
 package com.ericktijerou.anticucho_detector.repository
 
 import co.touchlab.kermit.Kermit
+import com.ericktijerou.anticucho_detector.UNKNOWN
 import com.ericktijerou.anticucho_detector.di.AnticuchoDetectorDatabaseWrapper
 import com.ericktijerou.anticucho_detector.remote.AnticuchoDetectorApi
 import com.squareup.sqldelight.runtime.coroutines.asFlow
@@ -15,11 +16,10 @@ class AnticuchoDetectorRepository : KoinComponent {
     private val anticuchoDetectorApi: AnticuchoDetectorApi by inject()
     private val logger: Kermit by inject()
 
-    private val coroutineScope: CoroutineScope = MainScope()
     private val database: AnticuchoDetectorDatabaseWrapper by inject()
     private val databaseQueries = database.instance?.anticuchoDetectorDatabaseQueries
 
-    var peopleJob: Job? = null
+    var detectorJob: Job? = null
 
     fun fetchPeopleAsFlow(): Flow<List<String>> {
         // the main reason we need to do this check is that sqldelight isn't currently
@@ -30,7 +30,7 @@ class AnticuchoDetectorRepository : KoinComponent {
     }
 
     suspend fun compareImage(filename: String, filepath: String): List<String> {
-        logger.d { "fetchAndStorePeople" }
+        logger.d { "compareImage" }
         val response = anticuchoDetectorApi.compareImage(filename, filepath)
 
         // this is very basic implementation for now that removes all existing rows
@@ -39,50 +39,18 @@ class AnticuchoDetectorRepository : KoinComponent {
         response.result.forEach {
             databaseQueries?.insertItem(it, it)
         }
-        return response.result
-    }
-
-    // Used by web client atm
-    suspend fun fetchPeople(filename: String, filepath: String) =
-        anticuchoDetectorApi.compareImage(filename, filepath).result
-
-    //fun getPersonBio(personName: String) = personBios[personName] ?: ""
-    //fun getPersonImage(personName: String) = personImages[personName] ?: ""
-
-
-    // called from Kotlin/Native clients
-    fun startObservingPeopleUpdates(success: (List<String>) -> Unit) {
-        logger.d { "startObservingPeopleUpdates" }
-        peopleJob = coroutineScope.launch {
-            fetchPeopleAsFlow().collect {
-                success(it)
-            }
-        }
+        return response.result.filterNot { it == UNKNOWN }
     }
 
     fun stopObservingPeopleUpdates() {
-        logger.d { "stopObservingPeopleUpdates, peopleJob = $peopleJob" }
-        peopleJob?.cancel()
+        logger.d { "stopObservingPeopleUpdates, peopleJob = $detectorJob" }
+        detectorJob?.cancel()
     }
-
-
-/*    fun pollISSPosition(): Flow<IssPosition> = flow {
-        while (true) {
-            val position = api.fetchISSPosition().iss_position
-            emit(position)
-            logger.d("Repository") { position.toString() }
-            delay(POLL_INTERVAL)
-        }
-    }*/
-
 
     val iosScope: CoroutineScope = object : CoroutineScope {
         override val coroutineContext: CoroutineContext
             get() = SupervisorJob() + Dispatchers.Main
     }
-
-    // fun iosPollISSPosition() = KotlinNativeFlowWrapper<IssPosition>(pollISSPosition())
-
 
     companion object {
         private const val POLL_INTERVAL = 10000L

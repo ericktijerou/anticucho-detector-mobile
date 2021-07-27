@@ -17,7 +17,7 @@ data class Person(val name: String, val lastname: String)
 
 class AnticuchoDetectorApi(
     private val client: HttpClient,
-    private val baseUrl: String = "https://anticucho-detector-7aotr.ondigitalocean.app",
+    private val baseUrl: String = "https://anticucho-detector.herokuapp.com",
 ) : KoinComponent {
     suspend fun compareImage(filename: String, filepath: String): Response {
         return client.post("$baseUrl/compare") {

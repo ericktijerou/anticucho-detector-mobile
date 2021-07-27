@@ -10,8 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ericktijerou.anticucho_detector.android.ui.theme.DetectorTheme
+import com.ericktijerou.anticucho_detector.android.ui.theme.typography
 import com.ericktijerou.anticucho_detector.android.util.SEPARATOR
 import com.ericktijerou.anticucho_detector.android.util.capitalizeFirstLetter
 
@@ -38,7 +41,8 @@ fun ResultScreen(upPress: () -> Unit, result: String) {
             nameList.forEach { name ->
                 Text(
                     name.replace("_", " ").capitalizeFirstLetter(),
-                    color = DetectorTheme.customColors.textSecondaryColor
+                    color = Color.White,
+                    style = DetectorTheme.typography.h4
                 )
             }
         }
