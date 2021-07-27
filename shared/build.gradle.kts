@@ -10,7 +10,14 @@ plugins {
 
 kotlin {
     android()
-    ios {
+
+    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
+        if (System.getenv("SDK_NAME")?.startsWith("iphoneos") == true)
+            ::iosArm64
+        else
+            ::iosX64
+
+    iosTarget("ios") {
         binaries {
             framework {
                 baseName = "shared"
@@ -109,24 +116,16 @@ multiplatformSwiftPackage {
 }
 
 val packForXcode by tasks.creating(Sync::class) {
-    group = "build"
     val mode = System.getenv("CONFIGURATION") ?: "DEBUG"
-    val sdkName = System.getenv("SDK_NAME") ?: "iphonesimulator"
-    val targetName = "ios" + if (sdkName.startsWith("iphoneos")) "Arm64" else "X64"
-    val framework =
-        kotlin.targets.getByName<KotlinNativeTarget>(targetName).binaries.getFramework(mode)
-    inputs.property("mode", mode)
-    dependsOn(framework.linkTask)
+    val framework = kotlin.targets.getByName<KotlinNativeTarget>("ios").binaries.getFramework(mode)
     val targetDir = File(buildDir, "xcode-frameworks")
+
+    group = "build"
+    dependsOn(framework.linkTask)
+    inputs.property("mode", mode)
+
     from({ framework.outputDirectory })
     into(targetDir)
-    doLast {
-        File(targetDir, "gradlew").apply {
-            writeText("#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n")
-            setExecutable(true)
-        }
-    }
 }
-
 
 tasks.getByName("build").dependsOn(packForXcode)
